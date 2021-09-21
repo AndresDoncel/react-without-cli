@@ -13,13 +13,22 @@ module.exports = (_env, argv) => {
     },
     devtool: isDevelopment && "cheap-module-source-map",
     resolve: {
-      extensions: [".ts", ".tsx", ".js"],
+      extensions: [".js", ".jsx"],
     },
     module: {
       rules: [
         {
-          test: /\.js?$/,
-          use: ["babel-loader"],
+          test: /\.(js|jsx)$/,
+          loader: "babel-loader",
+          exclude: /node_modules/,
+        },
+        {
+          test: /\.(scss|css)$/,
+          use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
+        },
+        {
+          test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+          type: "asset/resource",
         },
       ],
     },
