@@ -30,8 +30,8 @@ class FilterBar extends Component {
     return (
       <div className="container__filter">
         <div className="container__filter__options">
-          {categoryMovies.map((item, index) => {
-            return <p key={index}>{item.label}</p>;
+          {categoryMovies.map((item) => {
+            return <p key={item.id}>{item.label}</p>;
           })}
         </div>
         <div className="container__filter__sort">
