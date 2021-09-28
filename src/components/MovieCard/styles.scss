@@ -1,0 +1,51 @@
+.container__movie {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 37px;
+  cursor: pointer;
+  &__image {
+    height: 455px;
+    width: 322px;
+    object-fit: contain;
+  }
+  &__name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    p:first-child {
+      opacity: 0.7;
+      color: #fff;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 22px;
+      letter-spacing: 0px;
+      text-align: left;
+    }
+    p:nth-child(2) {
+      border: 1px solid #555555;
+      box-sizing: border-box;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #fff;
+      opacity: 0.7;
+      font-weight: 500;
+      font-size: 14px;
+      height: 26px;
+      width: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  &__category {
+    margin-top: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #fff;
+    opacity: 0.5;
+  }
+}
