@@ -1,123 +1,66 @@
-import React, { Component } from "react";
-import Header from "./Header";
-import FilterBar from "./FilterBar";
-import ListMovies from "./ListMovies";
-import Footer from "./Footer";
-
+import React, { useState, useEffect, createContext } from "react";
+import { Header } from "./Header";
+import { FilterBar } from "./FilterBar";
+import { ListMovies } from "./ListMovies";
+import { Footer } from "./Footer";
+import { MovieDetail } from "./MovieDetail";
+import { moviesData } from "../mock/movies";
 import "./global.scss";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      movies: [
-        {
-          id: "1",
-          name: "Pulp Fiction",
-          category: "Action & Adventure",
-          year: "2004",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "2",
-          name: "Pulp Fiction",
-          category: "Action & Adventure",
-          year: "2004",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "3",
-          name: "Bohemian Rhapsody",
-          category: "Drama, Biography, Music",
-          year: "2003",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "4",
-          name: "Kill Bill: Vol 2",
-          category: "Oscar winning Movie",
-          year: "1994",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "5",
-          name: "Bohemian Rhapsody",
-          category: "Drama, Biography, Music",
-          year: "2003",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "6",
-          name: "Bohemian Rhapsody",
-          category: "Drama, Biography, Music",
-          year: "2003",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "7",
-          name: "Bohemian Rhapsody",
-          category: "Drama, Biography, Music",
-          year: "2003",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "8",
-          name: "Bohemian Rhapsody",
-          category: "Drama, Biography, Music",
-          year: "2003",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-        {
-          id: "9",
-          name: "Bohemian Rhapsody",
-          category: "Drama, Biography, Music",
-          year: "2003",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-      ],
-      app: { title: "netflix", subtitle: "roulette" },
-    };
-  }
+export const App = () => {
+  const userDetailContext = createContext(null);
 
-  componentDidMount() {
-    setInterval(() => this.randomBestMovies(), 1000);
-  }
+  //user mock to implement context
+  const [userDetails] = useState({
+    name: "Andres",
+    id: "000033",
+  });
 
-  randomBestMovies() {
-    this.setState({
-      movies: [
-        {
-          id: "1",
-          name: "Pulp Fiction",
-          category: "Action & Adventure",
-          year: "2004",
-          image:
-            "https://es.web.img3.acsta.net/pictures/18/05/21/12/50/1518397.jpg",
-        },
-      ],
+  const app = { title: "netflix", subtitle: "roulette" };
+
+  const [movies, setMovies] = useState(moviesData);
+  const [selectedMovie, setMovieSelected] = useState(null);
+
+  //custom hook to return movies count
+  const useTotalMovies = (movies) => {
+    const [moviesCount, setMoviesCount] = useState(0);
+
+    useEffect(() => {
+      setMoviesCount(movies.length);
     });
-  }
 
-  render() {
-    const { movies, app } = this.state;
-    return (
+    return moviesCount;
+  };
+
+  const movieSelectHandler = (event) => {
+    window.scrollTo(0, 0);
+    console.log("event here", event);
+    setMovieSelected(event);
+  };
+
+  const searchSelected = () => {
+    setMovieSelected(null);
+  };
+
+  return (
+    <userDetailContext.Provider value={userDetails}>
       <div className="container_app">
-        <Header app={app} />
+        {/* TODO: make component to show moviesCount */}
+        <span style={{ display: "none" }}>
+          Total movies: {useTotalMovies(moviesData)}
+        </span>
+        {selectedMovie && (
+          <MovieDetail
+            onSearchSelect={searchSelected}
+            selectedMovie={selectedMovie}
+            app={app}
+          />
+        )}
+        {!selectedMovie && <Header app={app} />}
         <FilterBar />
-        <ListMovies movies={movies} />
+        <ListMovies onMovieSelect={movieSelectHandler} movies={movies} />
         <Footer />
       </div>
-    );
-  }
-}
-
-export default App;
+    </userDetailContext.Provider>
+  );
+};

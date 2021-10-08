@@ -1,28 +1,26 @@
 import React from "react";
-import { Component } from "react";
-import MovieCard from "../MovieCard";
+import { MovieCard } from "../MovieCard";
 import ErrorBoundary from "../ErrorBundary";
 import PropTypes from "prop-types";
 import "./styles.scss";
 
-class ListMovies extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { counter: 0 };
-  }
-
-  render() {
-    return (
-      <ErrorBoundary>
-        <div className="container__movies">
-          {this.props.movies.map((movie) => {
-            return <MovieCard key={movie.id} movie={movie} />;
-          })}
-        </div>
-      </ErrorBoundary>
-    );
-  }
-}
+export const ListMovies = ({ movies, onMovieSelect }) => {
+  return (
+    <ErrorBoundary>
+      <div className="container__movies">
+        {movies.map((movie) => {
+          return (
+            <MovieCard
+              onMovieSelect={onMovieSelect}
+              key={movie.id}
+              movie={movie}
+            />
+          );
+        })}
+      </div>
+    </ErrorBoundary>
+  );
+};
 
 ListMovies.propTypes = {
   id: PropTypes.string,
