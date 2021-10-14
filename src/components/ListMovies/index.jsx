@@ -1,26 +1,60 @@
-import React from "react";
+import React, { Component } from "react";
 import { MovieCard } from "../MovieCard";
 import ErrorBoundary from "../ErrorBundary";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import "./styles.scss";
+import {
+  retrieveMovies,
+  findMoviesByGender,
+  sortMoviesByOrder,
+} from "../../actions/movies";
+import { FilterBar } from "../FilterBar";
 
-export const ListMovies = ({ movies, onMovieSelect }) => {
-  return (
-    <ErrorBoundary>
-      <div className="container__movies">
-        {movies.map((movie) => {
-          return (
-            <MovieCard
-              onMovieSelect={onMovieSelect}
-              key={movie.id}
-              movie={movie}
-            />
-          );
-        })}
-      </div>
-    </ErrorBoundary>
-  );
-};
+class ListMovies extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.retrieveMovies();
+  }
+
+  onCategorySelect = (cat) => {
+    if (cat.id === "all") {
+      this.props.retrieveMovies();
+    } else {
+      this.props.findMoviesByGender(cat.label);
+    }
+  };
+
+  onOrderSelected = (order) => {
+    this.props.sortMoviesByOrder(order);
+  };
+
+  render() {
+    const { movies } = this.props;
+    return (
+      <ErrorBoundary>
+        <FilterBar
+          onOrderSelect={this.onOrderSelected}
+          onCategorySelect={this.onCategorySelect}
+        />
+        <div className="container__movies">
+          {movies.map((movie) => {
+            return (
+              <MovieCard
+                onMovieSelect={this.props.onMovieSelect}
+                key={movie.id}
+                movie={movie}
+              />
+            );
+          })}
+        </div>
+      </ErrorBoundary>
+    );
+  }
+}
 
 ListMovies.propTypes = {
   id: PropTypes.string,
@@ -30,4 +64,14 @@ ListMovies.propTypes = {
   image: PropTypes.string,
 };
 
-export default ListMovies;
+const mapStateToProps = (state) => {
+  return {
+    movies: state.movies,
+  };
+};
+
+export default connect(mapStateToProps, {
+  retrieveMovies,
+  findMoviesByGender,
+  sortMoviesByOrder,
+})(ListMovies);

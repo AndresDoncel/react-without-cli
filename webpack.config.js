@@ -6,7 +6,7 @@ module.exports = (_env, argv) => {
   const isDevelopment = !isProduction;
 
   return {
-    entry: "./src/index.js",
+    entry: ["regenerator-runtime/runtime.js", "./src/index.js"],
     output: {
       path: path.join(__dirname, "dist"),
       filename: "index_bundle.js",

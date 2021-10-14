@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import "./styles.scss";
 
-export const FilterBar = () => {
+export const FilterBar = ({ onCategorySelect, onOrderSelect }) => {
+  const [categorySelected, setCategorySelected] = useState("all");
+  const [orderSelected, setOrderSelected] = useState("desc");
+
   const categoryMovies = [
     {
       id: "all",
@@ -25,16 +29,48 @@ export const FilterBar = () => {
     },
   ];
 
+  const handleCategorySelected = useCallback((category) => {
+    setCategorySelected(category);
+    onCategorySelect(category);
+  }, []);
+
+  const handleOrderSelected = useCallback((order) => {
+    setOrderSelected(order);
+    onOrderSelect(order);
+  }, []);
+
   return (
     <div className="container__filter">
       <div className="container__filter__options">
         {categoryMovies.map((item) => {
-          return <p key={item.id}>{item.label}</p>;
+          return (
+            <p
+              className={
+                "category " +
+                (categorySelected.id === item.id ? "selected " : "normal")
+              }
+              onClick={() => {
+                handleCategorySelected(item);
+              }}
+              key={item.id}
+            >
+              {item.label}
+            </p>
+          );
         })}
       </div>
       <div className="container__filter__sort">
         <span>Sort by</span>
-        <p>release date</p>
+        <p
+          onClick={() => {
+            handleOrderSelected(orderSelected === "desc" ? "asc" : "desc");
+          }}
+        >
+          release date
+          <span>
+            {orderSelected === "desc" ? <FaArrowUp /> : <FaArrowDown />}
+          </span>
+        </p>
       </div>
     </div>
   );
