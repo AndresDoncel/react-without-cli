@@ -27,9 +27,9 @@ export const findMoviesByGender = (gender) => async (dispatch) => {
   }
 };
 
-export const sortMoviesByOrder = (order) => async (dispatch) => {
+export const sortMoviesByOrder = (sortBy, sortOrder) => async (dispatch) => {
   try {
-    const res = await MovieDataService.sortByOrder(order);
+    const res = await MovieDataService.sortByOrder(sortBy, sortOrder);
 
     dispatch({
       type: RETRIEVE_MOVIES,

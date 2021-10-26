@@ -1,10 +1,21 @@
 import React, { useState, useCallback } from "react";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import "./styles.scss";
+import Select from "react-select";
 
-export const FilterBar = ({ onCategorySelect, onOrderSelect }) => {
+export const FilterBar = ({ onCategorySelect, onFilterSelected }) => {
   const [categorySelected, setCategorySelected] = useState("all");
-  const [orderSelected, setOrderSelected] = useState("desc");
+  const [optionFilterSelected, setOptionFilterSelected] = useState("");
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      height: 50,
+      minHeight: 50,
+      backgroundColor: "transparent",
+      border: "none",
+      color: "#fff",
+    }),
+  };
 
   const categoryMovies = [
     {
@@ -29,14 +40,25 @@ export const FilterBar = ({ onCategorySelect, onOrderSelect }) => {
     },
   ];
 
+  const filterOptions = [
+    {
+      value: "release_date",
+      label: "Relase date",
+    },
+    {
+      value: "vote_average",
+      label: "Rating",
+    },
+  ];
+
   const handleCategorySelected = useCallback((category) => {
     setCategorySelected(category);
     onCategorySelect(category);
   }, []);
 
-  const handleOrderSelected = useCallback((order) => {
-    setOrderSelected(order);
-    onOrderSelect(order);
+  const handleFilterChange = useCallback((optionSelected) => {
+    setOptionFilterSelected(optionSelected);
+    onFilterSelected(optionSelected);
   }, []);
 
   return (
@@ -59,18 +81,15 @@ export const FilterBar = ({ onCategorySelect, onOrderSelect }) => {
           );
         })}
       </div>
-      <div className="container__filter__sort">
-        <span>Sort by</span>
-        <p
-          onClick={() => {
-            handleOrderSelected(orderSelected === "desc" ? "asc" : "desc");
-          }}
-        >
-          release date
-          <span>
-            {orderSelected === "desc" ? <FaArrowUp /> : <FaArrowDown />}
-          </span>
-        </p>
+      <div className="container__filter__sort container__input">
+        <label>release date</label>
+        <Select
+          onChange={handleFilterChange}
+          styles={customStyles}
+          classNamePrefix="filter"
+          placeholder="Select a filter"
+          options={filterOptions}
+        />
       </div>
     </div>
   );

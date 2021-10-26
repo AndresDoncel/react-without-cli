@@ -13,8 +13,8 @@ class MovieDataService {
     return http.get(`/movies?searchBy=genres&filter=${gender}`);
   }
 
-  sortByOrder(type) {
-    return http.get(`/movies?sortOrder=${type}`);
+  sortByOrder(sortBy, sortOrder) {
+    return http.get(`/movies?sortBy=${sortBy}&sortOrder=${sortOrder}`);
   }
 }
 

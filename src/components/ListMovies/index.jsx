@@ -28,8 +28,10 @@ class ListMovies extends Component {
     }
   };
 
-  onOrderSelected = (order) => {
-    this.props.sortMoviesByOrder(order);
+  onOrderSelected = (optionSelected) => {
+    const sortBy = optionSelected.value;
+    const sortOrder = optionSelected.value === "vote_average" ? "desc" : "asc";
+    this.props.sortMoviesByOrder(sortBy, sortOrder);
   };
 
   render() {
@@ -37,7 +39,7 @@ class ListMovies extends Component {
     return (
       <ErrorBoundary>
         <FilterBar
-          onOrderSelect={this.onOrderSelected}
+          onFilterSelected={this.onOrderSelected}
           onCategorySelect={this.onCategorySelect}
         />
         <div className="container__movies">
