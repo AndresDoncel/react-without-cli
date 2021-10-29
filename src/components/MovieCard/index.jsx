@@ -65,14 +65,18 @@ export const MovieCard = ({ movie, onMovieSelect }) => {
             handleClick(movie);
           }}
           className="container__movie__image"
-          src={movie.image}
+          src={movie.poster_path}
           alt=""
         />
         <div className="container__movie__name">
-          <p>{movie.name}</p>
-          <p>{movie.year}</p>
+          <p>{movie.title}</p>
+          <p>{new Date(movie.release_date).getFullYear()}</p>
         </div>
-        <p className="container__movie__category">{movie.category}</p>
+        <p className="container__movie__category">
+          {movie.genres.map((g) => {
+            return <span>{g}, </span>;
+          })}
+        </p>
       </div>
       <Modal
         title="Edit movie"
