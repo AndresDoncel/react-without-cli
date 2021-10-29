@@ -10,10 +10,22 @@ import {
   sortMoviesByOrder,
 } from "../../actions/movies";
 import { FilterBar } from "../FilterBar";
+import { ModalDelete } from "../ModalDelete";
+import { Modal } from "../Modal";
+import { FormAddMovie } from "../FormAddMovie";
+import movieService from "../../services/movie.service";
 
 class ListMovies extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      showModalEdit: false,
+      movieSelected: null,
+      showModalDeleteMovie: false,
+    };
+
+    this.showModalditMovie = this.showModalEditMovie.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +46,34 @@ class ListMovies extends Component {
     this.props.sortMoviesByOrder(sortBy, sortOrder);
   };
 
+  showModalEditMovie(movie) {
+    this.setState({
+      showModalEdit: true,
+      movieSelected: movie,
+    });
+  }
+
+  deleteMovie() {
+    const movie = this.state.movieSelected;
+    movieService
+      .delete(movie.id)
+      .then(() => {
+        this.props.retrieveMovies();
+        this.setState({ showModalDeleteMovie: false, movieSelected: null });
+        openSnackbar("Movie was deleted successfully");
+      })
+      .catch((error) => {
+        openSnackbar("Movie wasnt deleted successfully");
+      });
+  }
+
+  onShowModalDeleteMovie(movie) {
+    this.setState({
+      movieSelected: movie,
+      showModalDeleteMovie: true,
+    });
+  }
+
   render() {
     const { movies } = this.props;
     return (
@@ -46,6 +86,8 @@ class ListMovies extends Component {
           {movies.map((movie) => {
             return (
               <MovieCard
+                onDeleteMovie={(movie) => this.onShowModalDeleteMovie(movie)}
+                onEditMovie={(movie) => this.showModalEditMovie(movie)}
                 onMovieSelect={this.props.onMovieSelect}
                 key={movie.id}
                 movie={movie}
@@ -53,6 +95,27 @@ class ListMovies extends Component {
             );
           })}
         </div>
+        <Modal
+          handleClose={() =>
+            this.setState({ showModalEdit: false, movieSelected: null })
+          }
+          title="Edit movie"
+          show={this.state.showModalEdit}
+        >
+          <FormAddMovie
+            onCreateMovieSuccess={() => this.hideModalEdit}
+            movie={this.state.movieSelected}
+          ></FormAddMovie>
+        </Modal>
+        <ModalDelete
+          onConfirm={() => this.deleteMovie()}
+          title="Delete movie"
+          description="Are you sure you want to delete this movie?"
+          show={this.state.showModalDeleteMovie}
+          handleClose={() =>
+            this.setState({ showModalDeleteMovie: false, movieSelected: null })
+          }
+        ></ModalDelete>
       </ErrorBoundary>
     );
   }

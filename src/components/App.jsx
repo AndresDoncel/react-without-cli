@@ -4,6 +4,7 @@ import ListMovies from "./ListMovies";
 import { Footer } from "./Footer";
 import { MovieDetail } from "./MovieDetail";
 import "./global.scss";
+import SnackbarProvider from "react-simple-snackbar";
 
 export const App = () => {
   const userDetailContext = createContext(null);
@@ -27,19 +28,21 @@ export const App = () => {
   };
 
   return (
-    <userDetailContext.Provider value={userDetails}>
-      <div className="container_app">
-        {selectedMovie && (
-          <MovieDetail
-            onSearchSelect={searchSelected}
-            selectedMovie={selectedMovie}
-            app={app}
-          />
-        )}
-        {!selectedMovie && <Header app={app} />}
-        <ListMovies onMovieSelect={movieSelectHandler} />
-        <Footer />
-      </div>
-    </userDetailContext.Provider>
+    <SnackbarProvider>
+      <userDetailContext.Provider value={userDetails}>
+        <div className="container_app">
+          {selectedMovie && (
+            <MovieDetail
+              onSearchSelect={searchSelected}
+              selectedMovie={selectedMovie}
+              app={app}
+            />
+          )}
+          {!selectedMovie && <Header app={app} />}
+          <ListMovies onMovieSelect={movieSelectHandler} />
+          <Footer />
+        </div>
+      </userDetailContext.Provider>
+    </SnackbarProvider>
   );
 };

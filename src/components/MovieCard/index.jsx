@@ -1,14 +1,14 @@
 import React, { Fragment, useState, useCallback } from "react";
 import "./styles.scss";
 import { FaEllipsisV } from "react-icons/fa";
-import { ModalDelete } from "../ModalDelete";
-import { Modal } from "../Modal";
-import FormAddMovie from "../FormAddMovie";
 
-export const MovieCard = ({ movie, onMovieSelect }) => {
+export const MovieCard = ({
+  movie,
+  onMovieSelect,
+  onEditMovie,
+  onDeleteMovie,
+}) => {
   const [showOptionsCard, setShowOptionsCard] = useState(false);
-  const [showModalDeleteMovie, setShowModalDeleteMovie] = useState(false);
-  const [showModalEditMovie, setShowModalEditMovie] = useState(false);
 
   const showModalOptions = () => {
     setShowOptionsCard(true);
@@ -16,22 +16,6 @@ export const MovieCard = ({ movie, onMovieSelect }) => {
 
   const hideModalOptions = () => {
     setShowOptionsCard(false);
-  };
-
-  const showModalDelete = () => {
-    setShowModalDeleteMovie(true);
-  };
-
-  const hideModalDelete = () => {
-    setShowModalDeleteMovie(false);
-  };
-
-  const showModalEdit = () => {
-    setShowModalEditMovie(true);
-  };
-
-  const hideModalEdit = () => {
-    setShowModalEditMovie(false);
   };
 
   const handleClick = useCallback(() => {
@@ -52,10 +36,10 @@ export const MovieCard = ({ movie, onMovieSelect }) => {
             <div onClick={hideModalOptions} className="button_close_modal">
               X
             </div>
-            <div className="action_modal" onClick={showModalEdit}>
+            <div className="action_modal" onClick={() => onEditMovie(movie)}>
               Edit
             </div>
-            <div className="action_modal" onClick={showModalDelete}>
+            <div className="action_modal" onClick={() => onDeleteMovie(movie)}>
               Delete
             </div>
           </div>
@@ -78,19 +62,6 @@ export const MovieCard = ({ movie, onMovieSelect }) => {
           })}
         </p>
       </div>
-      <Modal
-        title="Edit movie"
-        show={showModalEditMovie}
-        handleClose={hideModalEdit}
-      >
-        <FormAddMovie></FormAddMovie>
-      </Modal>
-      <ModalDelete
-        title="Delete movie"
-        description="Are you sure you want to delete this movie?"
-        show={showModalDeleteMovie}
-        handleClose={hideModalDelete}
-      ></ModalDelete>
     </Fragment>
   );
 };
