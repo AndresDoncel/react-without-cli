@@ -19,7 +19,7 @@ export const ModalDelete = ({
           X
         </button>
         <div className="container_button">
-          <button type="button" onClick={onConfirm}>
+          <button type="button" onClick={() => onConfirm()}>
             Confirm
           </button>
         </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./styles.scss";
 import headerBackground from "../../assets/images/bg_header.png";
 import { Modal } from "../Modal";
-import FormAddMovie from "../FormAddMovie";
+import { FormAddMovie } from "../FormAddMovie";
 
 export const Header = ({ app }) => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +27,7 @@ export const Header = ({ app }) => {
             <span>{app.subtitle}</span>
           </p>
           <Modal title="Add movie" show={showModal} handleClose={hideModal}>
-            <FormAddMovie></FormAddMovie>
+            <FormAddMovie onCreateMovieSuccess={hideModal}></FormAddMovie>
           </Modal>
           <button className="add__movie__button" onClick={onShowModal}>
             + add movie

@@ -1,86 +1,239 @@
-import React from "react";
-import { Component } from "react";
+import React, { useEffect, useState } from "react";
 import ErrorBoundary from "../ErrorBundary";
 import "./styles.scss";
 import Select from "react-select";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import movieService from "../../services/movie.service";
+import * as Yup from "yup";
+import { useSnackbar } from "react-simple-snackbar";
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+export const FormAddMovie = ({ movie, onCreateMovieSuccess }) => {
+  const [openSnackbar, closeSnackbar] = useSnackbar();
 
-const customStyles = {
-  control: (base) => ({
-    ...base,
-    height: 57,
-    minHeight: 57,
-    backgroundColor: "#323232",
-    color: "#fff",
-  }),
-};
+  const initialValues = movie
+    ? { ...movie }
+    : {
+        title: "",
+        release_date: "",
+        poster_path: "",
+        vote_average: "",
+        genres: [],
+        runtime: "",
+        overview: "",
+      };
 
-class FormAddMovie extends Component {
-  constructor(props) {
-    super(props);
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    release_date: Yup.string().required("release_date is required"),
+    poster_path: Yup.string().required("poster_path is required"),
+    vote_average: Yup.string()
+      .required("vote_average is required")
+      .min(1, "Vote aavaraage must be at least 1")
+      .max(100, "Vote aavaraage must be at max 100"),
+    genres: Yup.array().required("genres is required"),
+    runtime: Yup.string().required("runtime is required"),
+    overview: Yup.string().required("overview is required"),
+  });
+
+  function onSubmit(fields, { setStatus, setSubmitting }) {
+    setStatus();
+    console.log("entrando aca", movie);
+    if (!movie) {
+      createMovie(fields, setSubmitting);
+    } else {
+      updateMovie(fields, setSubmitting);
+    }
   }
 
-  render() {
-    return (
-      <ErrorBoundary>
-        <div className="container__form">
-          <form action="">
-            <div className="row__form">
-              <div className="container__input input__left">
-                <label>TITLE</label>
-                <input type="text" />
-              </div>
-              <div className="container__input input__rigth">
-                <label>RELEASE DATE</label>
-                <input type="date" />
-              </div>
-            </div>
-            <div className="row__form">
-              <div className="container__input input__left">
-                <label>MOVIE URL</label>
-                <input type="text" />
-              </div>
-              <div className="container__input input__rigth">
-                <label>RATING</label>
-                <input type="text" />
-              </div>
-            </div>
-            <div className="row__form">
-              <div className="container__input input__left">
-                <label>genre</label>
-                <Select
+  function createMovie(fields, setSubmitting) {
+    movieService
+      .create(fields)
+      .then(() => {
+        onCreateMovieSuccess();
+        openSnackbar("Movie was created successfully");
+      })
+      .catch(() => {
+        setSubmitting(false);
+      });
+  }
+
+  function updateMovie(fields, setSubmitting) {
+    movieService
+      .update(fields)
+      .then(() => {
+        document.querySelectorAll(".modal").forEach(function (a) {
+          a.remove();
+        });
+        openSnackbar("Movie was updated successfully");
+      })
+      .catch((error) => {
+        setSubmitting(false);
+      });
+  }
+
+  return (
+    <ErrorBoundary>
+      <div className="container__form">
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ errors, touched, isSubmitting }) => {
+            return (
+              <Form>
+                <div className="row__form">
+                  <div className="container__input input__left">
+                    <label>TITLE</label>
+                    <Field
+                      className={
+                        "form-control" +
+                        (errors.title && touched.title ? " is-invalid" : "")
+                      }
+                      id="title"
+                      name="title"
+                      placeholder="Title"
+                    />
+                    <ErrorMessage name="title" className="invalid-feedback" />
+                  </div>
+                  <div className="container__input input__rigth">
+                    <label>RELEASE DATE</label>
+                    <Field
+                      className={
+                        "form-control" +
+                        (errors.release_date && touched.release_date
+                          ? " is-invalid"
+                          : "")
+                      }
+                      type="date"
+                      id="release_date"
+                      name="release_date"
+                      placeholder="Release date"
+                    />
+                    <ErrorMessage
+                      name="release_date"
+                      className="invalid-feedback"
+                    />
+                  </div>
+                </div>
+                <div className="row__form">
+                  <div className="container__input input__left">
+                    <label>MOVIE URL</label>
+                    <Field
+                      className={
+                        "form-control" +
+                        (errors.poster_path && touched.poster_path
+                          ? " is-invalid"
+                          : "")
+                      }
+                      id="poster_path"
+                      name="poster_path"
+                      placeholder="Movie URL"
+                    />
+                    <ErrorMessage
+                      name="poster_path"
+                      className="invalid-feedback"
+                    />
+                  </div>
+                  <div className="container__input input__rigth">
+                    <label>RATING</label>
+                    <Field
+                      className={
+                        "form-control" +
+                        (errors.vote_average && touched.vote_average
+                          ? " is-invalid"
+                          : "")
+                      }
+                      type="number"
+                      id="vote_average"
+                      name="vote_average"
+                      placeholder="Rating"
+                    />
+                    <ErrorMessage
+                      name="vote_average"
+                      className="invalid-feedback"
+                    />
+                  </div>
+                </div>
+                <div className="row__form">
+                  <div className="container__input input__left">
+                    <label>genre</label>
+                    {/* <Select
                   styles={customStyles}
                   classNamePrefix="filter"
                   placeholder="Select a gender"
                   options={options}
-                />
-              </div>
-              <div className="container__input input__rigth">
-                <label>RUNTIME</label>
-                <input type="text" />
-              </div>
-            </div>
-            <div className="row__form">
-              <div className="container__textarea">
-                <label>OVERVIEW</label>
-                <textarea id="overview" name="overview"></textarea>
-              </div>
-            </div>
+                  id="genres"
+                  name="genres"
+                /> */}
+                    <Field
+                      className={
+                        "form-control" +
+                        (errors.genres && touched.genres ? " is-invalid" : "")
+                      }
+                      as="select"
+                      multiple
+                      name="genres"
+                    >
+                      <option value="comedy">Comedy</option>
+                      <option value="accion">Accion</option>
+                      <option value="romance">Romance</option>
+                    </Field>
+                    <ErrorMessage name="genres" className="invalid-feedback" />
+                  </div>
+                  <div className="container__input input__rigth">
+                    <label>RUNTIME</label>
+                    <Field
+                      type="number"
+                      className={
+                        "form-control" +
+                        (errors.runtime && touched.runtime ? " is-invalid" : "")
+                      }
+                      id="runtime"
+                      name="runtime"
+                      placeholder="Runtime"
+                    />
+                    <ErrorMessage name="runtime" className="invalid-feedback" />
+                  </div>
+                </div>
+                <div className="row__form">
+                  <div className="container__textarea">
+                    <label>OVERVIEW</label>
+                    <Field
+                      className={
+                        "form-control" +
+                        (errors.overview && touched.overview
+                          ? " is-invalid"
+                          : "")
+                      }
+                      component="textarea"
+                      id="overview"
+                      name="overview"
+                      placeholder="Overview"
+                    />
+                    <ErrorMessage
+                      name="overview"
+                      className="invalid-feedback"
+                    />
+                  </div>
+                </div>
 
-            <div className="container__actions__form">
-              <button className="reset__button">RESET</button>
-              <button className="submit__button">submit</button>
-            </div>
-          </form>
-        </div>
-      </ErrorBoundary>
-    );
-  }
-}
-
-export default FormAddMovie;
+                <div className="container__actions__form">
+                  <button className="reset__button">RESET</button>
+                  <button
+                    disabled={isSubmitting}
+                    className="submit__button"
+                    type="submit"
+                  >
+                    submit
+                  </button>
+                </div>
+              </Form>
+            );
+          }}
+        </Formik>
+      </div>
+    </ErrorBoundary>
+  );
+};

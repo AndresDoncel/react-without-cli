@@ -16,6 +16,18 @@ class MovieDataService {
   sortByOrder(sortBy, sortOrder) {
     return http.get(`/movies?sortBy=${sortBy}&sortOrder=${sortOrder}`);
   }
+
+  create(data) {
+    return http.post("/movies", data);
+  }
+
+  update(data) {
+    return http.put(`/movies`, data);
+  }
+
+  delete(id) {
+    return http.delete(`/movies/${id}`);
+  }
 }
 
 export default new MovieDataService();
