@@ -1,48 +1,61 @@
-import React, { useState, createContext } from "react";
-import { Header } from "./Header";
-import ListMovies from "./ListMovies";
-import { Footer } from "./Footer";
-import { MovieDetail } from "./MovieDetail";
+import React from "react";
 import "./global.scss";
-import SnackbarProvider from "react-simple-snackbar";
+import { Home } from "./Home";
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useSearchParams,
+  Navigate,
+} from "react-router-dom";
 
 export const App = () => {
-  const userDetailContext = createContext(null);
-
-  const [userDetails] = useState({
-    name: "Andres",
-    id: "000033",
-  });
-
-  const app = { title: "netflix", subtitle: "roulette" };
-
-  const [selectedMovie, setMovieSelected] = useState(null);
-
-  const movieSelectHandler = (event) => {
-    window.scrollTo(0, 0);
-    setMovieSelected(event);
-  };
-
-  const searchSelected = () => {
-    setMovieSelected(null);
-  };
+  let navigate = useNavigate();
+  let [searchParams, setSearchParams] = useSearchParams();
+  let searchQuery = searchParams.get("searchQuery");
+  let genreQuery = searchParams.get("genre");
+  let sortByQuery = searchParams.get("sortBy");
+  let movieQuery = searchParams.get("movie");
 
   return (
-    <SnackbarProvider>
-      <userDetailContext.Provider value={userDetails}>
-        <div className="container_app">
-          {selectedMovie && (
-            <MovieDetail
-              onSearchSelect={searchSelected}
-              selectedMovie={selectedMovie}
-              app={app}
-            />
-          )}
-          {!selectedMovie && <Header app={app} />}
-          <ListMovies onMovieSelect={movieSelectHandler} />
-          <Footer />
-        </div>
-      </userDetailContext.Provider>
-    </SnackbarProvider>
+    <Routes>
+      <Route path="/" element={<Navigate to="/search" />} />
+      <Route
+        exact
+        path="/search"
+        element={
+          <Home
+            movieQuery={movieQuery}
+            searchQuery={searchQuery}
+            genreQuery={genreQuery}
+            sortByQuery={sortByQuery}
+          />
+        }
+      />
+      <Route
+        path="/search?:searchQuery&movie&genre&sortBy"
+        element={
+          <Home
+            movieQuery={movieQuery}
+            searchQuery={searchQuery}
+            genreQuery={genreQuery}
+            sortByQuery={sortByQuery}
+          />
+        }
+      />
+      <Route path="*" element={<ErrorPage />} />
+    </Routes>
   );
 };
+
+function ErrorPage() {
+  return (
+    <div>
+      <h2>Error page</h2>
+      <p>
+        <Link to="/search">Go to the home page</Link>
+      </p>
+    </div>
+  );
+}

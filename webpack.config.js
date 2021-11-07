@@ -10,6 +10,10 @@ module.exports = (_env, argv) => {
     output: {
       path: path.join(__dirname, "dist"),
       filename: "index_bundle.js",
+      publicPath: "/",
+    },
+    devServer: {
+      historyApiFallback: true,
     },
     devtool: isDevelopment && "cheap-module-source-map",
     resolve: {

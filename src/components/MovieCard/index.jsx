@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useCallback } from "react";
 import "./styles.scss";
 import { FaEllipsisV } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export const MovieCard = ({
   movie,
@@ -9,6 +10,7 @@ export const MovieCard = ({
   onDeleteMovie,
 }) => {
   const [showOptionsCard, setShowOptionsCard] = useState(false);
+  const navigate = useNavigate();
 
   const showModalOptions = () => {
     setShowOptionsCard(true);
@@ -20,6 +22,8 @@ export const MovieCard = ({
 
   const handleClick = useCallback(() => {
     onMovieSelect(movie);
+    navigate(`/search/?movie=${movie.id}`);
+    window.location.reload();
   }, []);
 
   return (

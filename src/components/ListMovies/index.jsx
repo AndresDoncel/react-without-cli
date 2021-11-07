@@ -14,6 +14,7 @@ import { ModalDelete } from "../ModalDelete";
 import { Modal } from "../Modal";
 import { FormAddMovie } from "../FormAddMovie";
 import movieService from "../../services/movie.service";
+import { browserHistory } from "react-router";
 
 class ListMovies extends Component {
   constructor(props) {
@@ -29,7 +30,17 @@ class ListMovies extends Component {
   }
 
   componentDidMount() {
-    this.props.retrieveMovies();
+    const genreQuery = this.props.genreQuery;
+    const sortByQuery = this.props.sortByQuery;
+    if (!this.props.searchQuery) {
+      this.props.retrieveMovies("", genreQuery, sortByQuery);
+    } else {
+      this.props.retrieveMovies(
+        this.props.searchQuery,
+        genreQuery,
+        sortByQuery
+      );
+    }
   }
 
   onCategorySelect = (cat) => {
@@ -44,6 +55,7 @@ class ListMovies extends Component {
     const sortBy = optionSelected.value;
     const sortOrder = optionSelected.value === "vote_average" ? "desc" : "asc";
     this.props.sortMoviesByOrder(sortBy, sortOrder);
+    this.props.onChangeUrl(sortOrder);
   };
 
   showModalEditMovie(movie) {
@@ -79,6 +91,7 @@ class ListMovies extends Component {
     return (
       <ErrorBoundary>
         <FilterBar
+          genreQuery={this.props.genreQuery}
           onFilterSelected={this.onOrderSelected}
           onCategorySelect={this.onCategorySelect}
         />
