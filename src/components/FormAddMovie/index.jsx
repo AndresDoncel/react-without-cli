@@ -37,7 +37,6 @@ export const FormAddMovie = ({ movie, onCreateMovieSuccess }) => {
 
   function onSubmit(fields, { setStatus, setSubmitting }) {
     setStatus();
-    console.log("entrando aca", movie);
     if (!movie) {
       createMovie(fields, setSubmitting);
     } else {

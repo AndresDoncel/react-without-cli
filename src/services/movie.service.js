@@ -1,8 +1,12 @@
 import http from "../http-common";
 
 class MovieDataService {
-  getAll() {
-    return http.get("/movies");
+  getMovies(searchQuery, genreQuery, sortByQuery) {
+    const searchBy = genreQuery ? "genres" : "title";
+    const filter = genreQuery ? genreQuery : "";
+    return http.get(
+      `/movies?search=${searchQuery}&searchBy=${searchBy}&filter=${filter}&sortBy=${sortByQuery}`
+    );
   }
 
   get(id) {

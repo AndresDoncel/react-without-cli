@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import "./styles.scss";
+import MovieDataService from "../../services/movie.service";
 
-export const MovieDetail = ({ app, selectedMovie, onSearchSelect }) => {
-  console.log("selectedMovie", selectedMovie);
+export const MovieDetail = ({ app, movieId, onSearchSelect }) => {
+  const [movie, setMovie] = useState({});
+
+  useEffect(async () => {
+    const movie = await MovieDataService.get(movieId);
+    setMovie(movie.data);
+  }, []);
+
   return (
     <React.Fragment>
       <div className="container__detail__movie">
@@ -19,22 +26,22 @@ export const MovieDetail = ({ app, selectedMovie, onSearchSelect }) => {
           />
         </div>
         <div className="container__detail__movie__info">
-          <img src={selectedMovie.poster_path} alt="" />
+          <img src={movie.poster_path} alt="" />
           <div className="container__detail__movie__info__detail">
             <div className="container_name">
-              <h1>{selectedMovie.title}</h1>
-              <div className="rate">{selectedMovie.vote_average}</div>
+              <h1>{movie.title}</h1>
+              <div className="rate">{movie.vote_average}</div>
             </div>
-            <p className="category">
-              {selectedMovie.genres.map((g) => {
+            {/* <p className="category">
+              {movie.genres.map((g) => {
                 return <span>{g} </span>;
               })}
-            </p>
+            </p> */}
             <div className="container_duration">
-              <span>{new Date(selectedMovie.release_date).getFullYear()}</span>
-              <span>{selectedMovie.runtime}</span>
+              <span>{new Date(movie.release_date).getFullYear()}</span>
+              <span>{movie.runtime}</span>
             </div>
-            <p className="sinopsis">{selectedMovie.overview}</p>
+            <p className="sinopsis">{movie.overview}</p>
           </div>
         </div>
       </div>

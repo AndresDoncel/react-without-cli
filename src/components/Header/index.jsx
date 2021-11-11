@@ -3,9 +3,11 @@ import "./styles.scss";
 import headerBackground from "../../assets/images/bg_header.png";
 import { Modal } from "../Modal";
 import { FormAddMovie } from "../FormAddMovie";
+import { useNavigate } from "react-router-dom";
 
-export const Header = ({ app }) => {
+export const Header = ({ app, searchQuery, onReloadMovies }) => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const onShowModal = () => {
     setShowModal(true);
@@ -13,6 +15,16 @@ export const Header = ({ app }) => {
 
   const hideModal = () => {
     setShowModal(false);
+  };
+
+  const onSearchMovie = () => {
+    const search = document.getElementById("value_movie").value;
+    navigate(`/search/?searchQuery=${search}`);
+    window.location.reload();
+  };
+
+  const inputChangedHandler = (event) => {
+    searchQuery = event.target.value;
   };
 
   return (
@@ -37,8 +49,16 @@ export const Header = ({ app }) => {
           <h1>FIND YOUR MOVIE</h1>
         </div>
         <div className="container__header__search">
-          <input placeholder="What do you want to watch?" type="text" />
-          <button className="search__movie__button">Search</button>
+          <input
+            onChange={(event) => inputChangedHandler(event)}
+            id="value_movie"
+            defaultValue={searchQuery}
+            placeholder="What do you want to watch?"
+            type="text"
+          />
+          <button onClick={onSearchMovie} className="search__movie__button">
+            Search
+          </button>
         </div>
       </div>
     </div>

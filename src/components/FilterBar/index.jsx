@@ -1,10 +1,28 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./styles.scss";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 
-export const FilterBar = ({ onCategorySelect, onFilterSelected }) => {
-  const [categorySelected, setCategorySelected] = useState("all");
+export const FilterBar = ({
+  onCategorySelect,
+  onFilterSelected,
+  genreQuery,
+}) => {
+  const [categorySelected, setCategorySelected] = useState({
+    id: "all",
+    label: "all",
+  });
+
   const [optionFilterSelected, setOptionFilterSelected] = useState("");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setCategorySelected({
+      id: genreQuery,
+      label: genreQuery,
+    });
+  }, []);
 
   const customStyles = {
     control: (base) => ({
@@ -54,6 +72,7 @@ export const FilterBar = ({ onCategorySelect, onFilterSelected }) => {
   const handleCategorySelected = useCallback((category) => {
     setCategorySelected(category);
     onCategorySelect(category);
+    navigate(`/search/?genre=${category.id}`);
   }, []);
 
   const handleFilterChange = useCallback((optionSelected) => {
