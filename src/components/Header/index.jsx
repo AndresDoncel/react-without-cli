@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import "./styles.scss";
-import headerBackground from "../../assets/images/bg_header.png";
+// import headerBackground from "../../assets/images/bg_header.png";
 import { Modal } from "../Modal";
 import { FormAddMovie } from "../FormAddMovie";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 export const Header = ({ app, searchQuery, onReloadMovies }) => {
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onShowModal = () => {
     setShowModal(true);
@@ -19,7 +19,7 @@ export const Header = ({ app, searchQuery, onReloadMovies }) => {
 
   const onSearchMovie = () => {
     const search = document.getElementById("value_movie").value;
-    navigate(`/search/?searchQuery=${search}`);
+    // navigate(`/search/?searchQuery=${search}`);
     window.location.reload();
   };
 
@@ -29,15 +29,15 @@ export const Header = ({ app, searchQuery, onReloadMovies }) => {
 
   return (
     <div
-      style={{ backgroundImage: `url(${headerBackground})` }}
+      // style={{ backgroundImage: `url(${headerBackground})` }}
       className="container__header"
     >
       <div className="container__header__wrapper">
         <div className="container__header__add__movie">
-          <p>
+          {/* <p>
             {app.title}
             <span>{app.subtitle}</span>
-          </p>
+          </p> */}
           <Modal title="Add movie" show={showModal} handleClose={hideModal}>
             <FormAddMovie onCreateMovieSuccess={hideModal}></FormAddMovie>
           </Modal>

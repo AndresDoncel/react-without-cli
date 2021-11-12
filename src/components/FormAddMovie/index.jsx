@@ -5,10 +5,10 @@ import Select from "react-select";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import movieService from "../../services/movie.service";
 import * as Yup from "yup";
-import { useSnackbar } from "react-simple-snackbar";
+// import { useSnackbar } from "react-simple-snackbar";
 
 export const FormAddMovie = ({ movie, onCreateMovieSuccess }) => {
-  const [openSnackbar, closeSnackbar] = useSnackbar();
+  // const [openSnackbar, closeSnackbar] = useSnackbar();
 
   const initialValues = movie
     ? { ...movie }
