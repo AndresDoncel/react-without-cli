@@ -11,7 +11,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+      "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js",
+      "\\.(png)$": "<rootDir>/__mocks__/styleMock.js"
     }
   },
   "repository": {
