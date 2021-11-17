@@ -38,10 +38,16 @@ export const Header = ({ app, searchQuery, onReloadMovies }) => {
             {app.title}
             <span>{app.subtitle}</span>
           </p> */}
-          <Modal title="Add movie" show={showModal} handleClose={hideModal}>
-            <FormAddMovie onCreateMovieSuccess={hideModal}></FormAddMovie>
-          </Modal>
-          <button className="add__movie__button" onClick={onShowModal}>
+          <div data-testid="modal_add_movie">
+            <Modal title="Add movie" show={showModal} handleClose={hideModal}>
+              <FormAddMovie onCreateMovieSuccess={hideModal}></FormAddMovie>
+            </Modal>
+          </div>
+          <button
+            data-testid="add_movie"
+            className="add__movie__button"
+            onClick={onShowModal}
+          >
             + add movie
           </button>
         </div>
@@ -50,13 +56,18 @@ export const Header = ({ app, searchQuery, onReloadMovies }) => {
         </div>
         <div className="container__header__search">
           <input
+            data-testid="value_movie"
             onChange={(event) => inputChangedHandler(event)}
             id="value_movie"
             defaultValue={searchQuery}
             placeholder="What do you want to watch?"
             type="text"
           />
-          <button onClick={onSearchMovie} className="search__movie__button">
+          <button
+            data-testid="search-btn"
+            onClick={onSearchMovie}
+            className="search__movie__button"
+          >
             Search
           </button>
         </div>

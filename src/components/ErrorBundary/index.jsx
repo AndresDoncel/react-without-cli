@@ -9,7 +9,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div>
+        <div data-testid="errorboundary">
           <h1>Oops, we done goofed up</h1>
           <button
             type="button"

@@ -4,6 +4,8 @@ import { App } from "./components/App";
 import store from "./store";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 ReactDOM.render(
   <React.StrictMode>

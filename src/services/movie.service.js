@@ -1,36 +1,36 @@
-import http from "../http-common";
+import axios from "axios";
 
 class MovieDataService {
   getMovies(searchQuery, genreQuery, sortByQuery) {
     const searchBy = genreQuery ? "genres" : "title";
     const filter = genreQuery ? genreQuery : "";
-    return http.get(
+    return axios.get(
       `/movies?search=${searchQuery}&searchBy=${searchBy}&filter=${filter}&sortBy=${sortByQuery}`
     );
   }
 
   get(id) {
-    return http.get(`/movies/${id}`);
+    return axios.get(`/movies/${id}`);
   }
 
   findByGender(gender) {
-    return http.get(`/movies?searchBy=genres&filter=${gender}`);
+    return axios.get(`/movies?searchBy=genres&filter=${gender}`);
   }
 
   sortByOrder(sortBy, sortOrder) {
-    return http.get(`/movies?sortBy=${sortBy}&sortOrder=${sortOrder}`);
+    return axios.get(`/movies?sortBy=${sortBy}&sortOrder=${sortOrder}`);
   }
 
   create(data) {
-    return http.post("/movies", data);
+    return axios.post("/movies", data);
   }
 
   update(data) {
-    return http.put(`/movies`, data);
+    return axios.put(`/movies`, data);
   }
 
   delete(id) {
-    return http.delete(`/movies/${id}`);
+    return axios.delete(`/movies/${id}`);
   }
 }
 
