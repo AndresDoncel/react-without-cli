@@ -35,7 +35,7 @@ export const FormAddMovie = ({ movie, onCreateMovieSuccess }) => {
     overview: Yup.string().required("overview is required"),
   });
 
-  function onSubmit(fields, { setStatus, setSubmitting }) {
+  function handleSubmit(fields, { setStatus, setSubmitting }) {
     setStatus();
     if (!movie) {
       createMovie(fields, setSubmitting);
@@ -77,14 +77,14 @@ export const FormAddMovie = ({ movie, onCreateMovieSuccess }) => {
           enableReinitialize
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
         >
           {({ errors, touched, isSubmitting }) => {
             return (
               <Form>
                 <div className="row__form">
                   <div className="container__input input__left">
-                    <label>TITLE</label>
+                    <label htmlFor="title">TITLE</label>
                     <Field
                       className={
                         "form-control" +
@@ -221,11 +221,13 @@ export const FormAddMovie = ({ movie, onCreateMovieSuccess }) => {
                 <div className="container__actions__form">
                   <button className="reset__button">RESET</button>
                   <button
+                    data-testid="submit-btn"
+                    id="submit-form"
                     disabled={isSubmitting}
                     className="submit__button"
                     type="submit"
                   >
-                    submit
+                    Submit
                   </button>
                 </div>
               </Form>

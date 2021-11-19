@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when there are no items 1`] = `
+<div
+  className="container__footer"
+>
+  <p>
+    netflix
+    <span>
+      roulette
+    </span>
+  </p>
+</div>
+`;
